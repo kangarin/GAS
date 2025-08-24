@@ -8,6 +8,7 @@
 #include "GASAbilitySystemComponent.h"
 #include "AbilitySystemInterface.h"
 #include "GASAttributeSet.h"
+#include "AbilitySystemInterface.h"
 #include "GASCharacter.generated.h"
 
 class USpringArmComponent;
@@ -22,7 +23,7 @@ DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
  *  Implements a controllable orbiting camera
  */
 UCLASS(abstract)
-class AGASCharacter : public ACharacter
+class AGASCharacter : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -57,6 +58,11 @@ public:
 	/** Constructor */
 	AGASCharacter();	
 
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override
+	{
+		return GASAbilitySystemComponent;
+	}
+
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void OnRep_PlayerState() override;
 
@@ -68,7 +74,21 @@ protected:
 	/** Initialize Ability Actor Info */
 	void InitAbilityActorInfo();
 
+	/** Initialize default abilities, attributes, and effects */
 	void InitClassDefaults();
+
+	/** Binds ability system callbacks to functions on this class */
+	void BindCallbacksToDependencies();
+
+	/** Broadcast initial values for attributes that aren't replicated by default */
+	UFUNCTION(BlueprintCallable)
+	void BroadcastInitialValues();
+
+public:
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnHealthChanged(float CurrentHealth, float MaxHealth);
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnManaChanged(float CurrentMana, float MaxMana);
 
 protected:
 

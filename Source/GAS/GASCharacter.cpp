@@ -14,6 +14,8 @@
 #include "GAS.h"
 #include "GASAbilitySystemLibrary.h"
 #include "CharacterClassInfo.h"
+#include "GASAttributeSet.h"
+#include "GASAbilitySystemComponent.h"
 
 
 AGASCharacter::AGASCharacter()
@@ -81,6 +83,7 @@ void AGASCharacter::InitAbilityActorInfo()
 		if(IsValid(GASAbilitySystemComponent))
 		{
 			GASAbilitySystemComponent->InitAbilityActorInfo(GASPlayerState, this);
+			BindCallbacksToDependencies();
 
 			if(HasAuthority()){
 				InitClassDefaults();
@@ -112,6 +115,48 @@ void AGASCharacter::InitClassDefaults()
 		}
 	}
 }
+
+void AGASCharacter::BindCallbacksToDependencies()
+{
+	if(IsValid(GASAbilitySystemComponent) && IsValid(GASAttributeSet))
+	{
+		GASAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(GASAttributeSet->GetHealthAttribute()).AddLambda(
+			[&](const FOnAttributeChangeData& Data)
+			{
+				const float CurrentHealth = Data.NewValue;
+				const float MaxHealth = GASAttributeSet->GetMaxHealth();
+				OnHealthChanged(CurrentHealth, MaxHealth);
+			}
+		);
+
+		GASAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(GASAttributeSet->GetManaAttribute()).AddLambda(
+			[&](const FOnAttributeChangeData& Data)
+			{
+				const float CurrentMana = Data.NewValue;
+				const float MaxMana = GASAttributeSet->GetMaxMana();
+				OnManaChanged(CurrentMana, MaxMana);
+			}
+		);
+	}
+	else
+	{
+		UE_LOG(LogGAS, Error, TEXT("'%s' Failed to bind Ability System callbacks! Ability System Component or Attribute Set is invalid."), *GetNameSafe(this));
+	}
+}
+
+void AGASCharacter::BroadcastInitialValues()
+{
+	if(IsValid(GASAttributeSet))
+	{
+		OnHealthChanged(GASAttributeSet->GetHealth(), GASAttributeSet->GetMaxHealth());
+		OnManaChanged(GASAttributeSet->GetMana(), GASAttributeSet->GetMaxMana());
+	}
+	else
+	{
+		UE_LOG(LogGAS, Error, TEXT("'%s' Failed to broadcast initial values! Attribute Set is invalid."), *GetNameSafe(this));
+	}
+}
+
 
 void AGASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
