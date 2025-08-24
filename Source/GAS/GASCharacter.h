@@ -68,6 +68,8 @@ protected:
 	/** Initialize Ability Actor Info */
 	void InitAbilityActorInfo();
 
+	void InitClassDefaults();
+
 protected:
 
 	/** Called for movement input */
@@ -108,6 +110,10 @@ public:
 	TObjectPtr<UGASAbilitySystemComponent> GASAbilitySystemComponent;
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivate = true))
 	TObjectPtr<UGASAttributeSet> GASAttributeSet;
+
+private:
+	UPROPERTY(EditAnywhere)
+	FGameplayTag CharacterTag;
 
 };
 

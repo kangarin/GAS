@@ -13,5 +13,9 @@ UCLASS()
 class GAS_API UGASAbilitySystemComponent : public UAbilitySystemComponent
 {
 	GENERATED_BODY()
-	
+
+public:
+	void AddCharacterAbilities(const TArray<TSubclassOf<class UGameplayAbility>>& AbilitiesToGrant);
+	void AddCharacterPassives(const TArray<TSubclassOf<class UGameplayAbility>>& PassivesToGrant);
+	void InitializeDefaultAttributes(const TSubclassOf<class UGameplayEffect> AttributeEffect);
 };

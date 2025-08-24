@@ -12,6 +12,9 @@
 #include "InputActionValue.h"
 #include "GASPlayerState.h"
 #include "GAS.h"
+#include "GASAbilitySystemLibrary.h"
+#include "CharacterClassInfo.h"
+
 
 AGASCharacter::AGASCharacter()
 {
@@ -78,10 +81,34 @@ void AGASCharacter::InitAbilityActorInfo()
 		if(IsValid(GASAbilitySystemComponent))
 		{
 			GASAbilitySystemComponent->InitAbilityActorInfo(GASPlayerState, this);
+
+			if(HasAuthority()){
+				InitClassDefaults();
+			}
 		}
 		else
 		{
 			UE_LOG(LogGAS, Error, TEXT("'%s' Failed to find Ability System Component from Player State '%s'!"), *GetNameSafe(this), *GetNameSafe(GASPlayerState));
+		}
+	}
+}
+
+void AGASCharacter::InitClassDefaults()
+{
+	if(!CharacterTag.IsValid())
+	{
+		UE_LOG(LogGAS, Warning, TEXT("'%s' CharacterTag is not set! Please set a CharacterTag for this character class."), *GetNameSafe(this));
+	}
+	else if (UCharacterClassInfo* ClassInfo = UGASAbilitySystemLibrary::GetCharacterDefaultInfo(this)) 
+	{
+		if (FCharacterClassDefaultInfo* SelectedClassInfo = ClassInfo->ClassDefaultInfoMap.Find(CharacterTag)) 
+		{
+			if (IsValid(GASAbilitySystemComponent)) 
+			{
+				GASAbilitySystemComponent->AddCharacterAbilities(SelectedClassInfo->StartingAbilities);
+				GASAbilitySystemComponent->AddCharacterPassives(SelectedClassInfo->StartingPassives);
+				GASAbilitySystemComponent->InitializeDefaultAttributes(SelectedClassInfo->DefaultAttributes);
+			}
 		}
 	}
 }
