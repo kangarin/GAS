@@ -38,10 +38,3 @@ Desktop.ini
 
 # Ignore crash reports
 *.dmp
-
-# Ignore config backups
-Config/DefaultEditorPerProjectUserSettings.ini
-Config/DefaultEditor.ini
-Config/DefaultEngine.ini
-Config/DefaultGame.ini
-Config/DefaultInput.ini
