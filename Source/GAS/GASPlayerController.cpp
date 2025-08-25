@@ -8,6 +8,16 @@
 #include "Blueprint/UserWidget.h"
 #include "GAS.h"
 #include "Widgets/Input/SVirtualJoystick.h"
+#include "InventoryComponent.h"
+#include "Net/UnrealNetwork.h"
+
+AGASPlayerController::AGASPlayerController()
+{
+	bReplicates = true;
+	// create inventory component
+	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
+	InventoryComponent->SetIsReplicated(true);
+}
 
 void AGASPlayerController::BeginPlay()
 {
@@ -29,7 +39,6 @@ void AGASPlayerController::BeginPlay()
 			UE_LOG(LogGAS, Error, TEXT("Could not spawn mobile controls widget."));
 
 		}
-
 	}
 }
 
@@ -58,4 +67,10 @@ void AGASPlayerController::SetupInputComponent()
 			}
 		}
 	}
+}
+
+void AGASPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(AGASPlayerController, InventoryComponent);
 }

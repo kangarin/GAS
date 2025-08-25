@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "InventoryComponent.h"
 #include "GASPlayerController.generated.h"
 
 class UInputMappingContext;
@@ -17,6 +18,11 @@ UCLASS(abstract)
 class AGASPlayerController : public APlayerController
 {
 	GENERATED_BODY()
+
+public:
+	AGASPlayerController();
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
 protected:
 
@@ -40,5 +46,9 @@ protected:
 
 	/** Input mapping context setup */
 	virtual void SetupInputComponent() override;
+
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Replicated)
+	TObjectPtr<UInventoryComponent> InventoryComponent;
 
 };
