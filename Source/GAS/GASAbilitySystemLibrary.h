@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "Engine/DataTable.h"
+#include "GameplayTagContainer.h"
 #include "GASAbilitySystemLibrary.generated.h"
 
 class UCharacterClassInfo;
@@ -19,4 +21,8 @@ public:
 	UFUNCTION(BlueprintPure)
 	static UCharacterClassInfo* GetCharacterDefaultInfo(const UObject* WorldContextObject);
 	
+	template<typename T>
+	static T* GetDataTableRowByTag(UDataTable* DataTable, FGameplayTag Tag) {
+		return DataTable->FindRow<T>(Tag.GetTagName(), FString(""));
+	}
 };

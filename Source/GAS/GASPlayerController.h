@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "InventoryComponent.h"
+#include "AbilitySystemInterface.h"
+#include "AbilitySystemBlueprintLibrary.h"
 #include "GASPlayerController.generated.h"
 
 class UInputMappingContext;
@@ -15,12 +17,17 @@ class UUserWidget;
  *  Manages input mappings
  */
 UCLASS(abstract)
-class AGASPlayerController : public APlayerController
+class AGASPlayerController : public APlayerController, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
 public:
 	AGASPlayerController();
+
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override
+	{
+		return UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn());
+	}
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	

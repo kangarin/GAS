@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "ItemTypes.h"
+#include "ItemTypesToTables.h"
 #include "GameplayTagContainer.h"
 #include "InventoryComponent.generated.h"
 
@@ -45,6 +47,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void AddItem(const FGameplayTag& ItemTag, int32 Count = 1);
 
+	UFUNCTION(BlueprintCallable)
+	void UseItem(const FGameplayTag& ItemTag, int32 Count);
+
+	UFUNCTION(BlueprintPure)
+	FMasterItemDefinition GetItemDefinitionByTag(const FGameplayTag& ItemTag) const;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -56,8 +64,14 @@ private:
 	UFUNCTION(Server, Reliable)
 	void ServerAddItem(const FGameplayTag& ItemTag, int32 Count = 1);
 
+	UFUNCTION(Server, Reliable)
+	void ServerUseItem(const FGameplayTag& ItemTag, int32 Count);
+
 	UPROPERTY(ReplicatedUsing = OnRep_CachedInventory)
 	FPackagedInventory CachedInventory;
+
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UItemTypesToTables> InventoryDefinitions;
 
 	void PackageInventory(FPackagedInventory& PackagedInventory);
 	void ReconstructInventoryMap(const FPackagedInventory& PackagedInventory);

@@ -3,6 +3,9 @@
 
 #include "InventoryComponent.h"
 #include "Net/UnrealNetwork.h"
+#include "GASAbilitySystemLibrary.h"
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 
 bool FPackagedInventory::NetSerialize(FArchive& Ar, class UPackageMap* Map, bool& bOutSuccess)
 {
@@ -67,9 +70,54 @@ void UInventoryComponent::AddItem(const FGameplayTag& ItemTag, int32 Count)
 	PackageInventory(CachedInventory);
 }
 
+void UInventoryComponent::UseItem(const FGameplayTag& ItemTag, int32 Count)
+{
+	AActor* Owner = GetOwner();
+	if (!IsValid(Owner)) return;
+	if (!Owner->HasAuthority())
+	{
+		ServerUseItem(ItemTag, Count);
+		return;
+	}
+	FMasterItemDefinition Item = GetItemDefinitionByTag(ItemTag);
+	if(UAbilitySystemComponent* OwnerASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Owner))
+	{
+		if(IsValid(Item.ConsumableProps.ItemEffectClass))
+		{
+			const FGameplayEffectContextHandle ContextHandle = OwnerASC->MakeEffectContext();
+			const FGameplayEffectSpecHandle SpecHandle = OwnerASC->MakeOutgoingSpec(Item.ConsumableProps.ItemEffectClass, 
+				Item.ConsumableProps.ItemEffectLevel, ContextHandle);
+			OwnerASC->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+
+			AddItem(ItemTag, -1);
+
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, 
+				FString::Printf(TEXT("Used %d of item %s. Total now: %d"), Count, *ItemTag.ToString(), InventoryMap.Contains(ItemTag) ? InventoryMap[ItemTag] : 0));
+		}
+	}
+}
+
+FMasterItemDefinition UInventoryComponent::GetItemDefinitionByTag(const FGameplayTag& ItemTag) const
+{
+	checkf(InventoryDefinitions, TEXT("InventoryDefinitions is not set in InventoryComponent"));
+
+	for(const auto& Pair : InventoryDefinitions->TagsToTables)
+	{
+		if (ItemTag.MatchesTag(Pair.Key)) {
+			return *UGASAbilitySystemLibrary::GetDataTableRowByTag<FMasterItemDefinition>(Pair.Value, ItemTag);
+		}
+	}
+	return FMasterItemDefinition();
+}
+
 void UInventoryComponent::ServerAddItem_Implementation(const FGameplayTag& ItemTag, int32 Count)
 {
 	AddItem(ItemTag, Count);
+}
+
+void UInventoryComponent::ServerUseItem_Implementation(const FGameplayTag& ItemTag, int32 Count)
+{
+	UseItem(ItemTag, Count);
 }
 
 void UInventoryComponent::PackageInventory(FPackagedInventory& OutInventory)
