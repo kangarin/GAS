@@ -68,6 +68,7 @@ void UInventoryComponent::AddItem(const FGameplayTag& ItemTag, int32 Count)
 		FString::Printf(TEXT("Added %d of item %s. Total now: %d"), Count, *ItemTag.ToString(), InventoryMap[ItemTag]));
 
 	PackageInventory(CachedInventory);
+	InventoryPackagedDelegate.Broadcast(CachedInventory);
 }
 
 void UInventoryComponent::UseItem(const FGameplayTag& ItemTag, int32 Count)
@@ -146,4 +147,5 @@ void UInventoryComponent::ReconstructInventoryMap(const FPackagedInventory& Pack
 void UInventoryComponent::OnRep_CachedInventory()
 {
 	ReconstructInventoryMap(CachedInventory);
+	InventoryPackagedDelegate.Broadcast(CachedInventory);
 }

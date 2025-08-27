@@ -5,6 +5,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "InventoryComponent.h"
+#include "InventoryInterface.h"
+#include "InventoryWidgetController.h"
+#include "GASSystemWidget.h"
 #include "AbilitySystemInterface.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "GASPlayerController.generated.h"
@@ -17,7 +20,7 @@ class UUserWidget;
  *  Manages input mappings
  */
 UCLASS(abstract)
-class AGASPlayerController : public APlayerController, public IAbilitySystemInterface
+class AGASPlayerController : public APlayerController, public IAbilitySystemInterface, public IInventoryInterface
 {
 	GENERATED_BODY()
 
@@ -29,7 +32,17 @@ public:
 		return UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn());
 	}
 
+	virtual UInventoryComponent* GetInventoryComponent_Implementation() override
+	{
+		return InventoryComponent;
+	}
+
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	UInventoryWidgetController* GetInventoryWidgetController();
+
+	UFUNCTION(BlueprintCallable)
+	void CreateInventoryWidget();
 	
 protected:
 
@@ -54,8 +67,20 @@ protected:
 	/** Input mapping context setup */
 	virtual void SetupInputComponent() override;
 
-public:
+private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Replicated)
 	TObjectPtr<UInventoryComponent> InventoryComponent;
+
+	UPROPERTY()
+	TObjectPtr<UInventoryWidgetController> InventoryWidgetController;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UInventoryWidgetController> InventoryWidgetControllerClass;
+
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<UGASSystemWidget> InventoryWidget;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UGASSystemWidget> InventoryWidgetClass;
 
 };
