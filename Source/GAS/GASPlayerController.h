@@ -10,7 +10,12 @@
 #include "GASSystemWidget.h"
 #include "AbilitySystemInterface.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
+#include "GASAbilitySystemComponent.h"
+#include "GASInputConfig.h"
+#include "GASEnhancedInputComponent.h"
 #include "GASPlayerController.generated.h"
+
 
 class UInputMappingContext;
 class UUserWidget;
@@ -67,7 +72,20 @@ protected:
 	/** Input mapping context setup */
 	virtual void SetupInputComponent() override;
 
+	void AbilityInputPressed(FGameplayTag InputTag);
+	void AbilityInputReleased(FGameplayTag InputTag);
+
 private:
+
+	UPROPERTY()
+	TObjectPtr<UGASAbilitySystemComponent> GASAbilitySystemComponent;
+
+	UPROPERTY()
+	TObjectPtr<UGASEnhancedInputComponent> GASInputComponent;
+
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UGASInputConfig> RPGInputConfig;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Replicated)
 	TObjectPtr<UInventoryComponent> InventoryComponent;
 

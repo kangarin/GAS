@@ -9,7 +9,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInventoryItemSignature, const FMasterItemDefinition&, Item);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FInventoryBroadcastComplete);
-
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FScrollBoxResetSignature);
 /**
  * 
  */
@@ -26,11 +26,14 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FInventoryBroadcastComplete InventoryBroadcastCompleteDelegate;
 
+	UPROPERTY(BlueprintAssignable)
+	FScrollBoxResetSignature ScrollBoxResetDelegate;
+
 	void SetOwningActor(AActor* InOwner);
 
 	void BindCallbacksToDependencies();
 
-	void BroadcastInitialValues();\
+	void BroadcastInitialValues();
 
 private:
 	void UpdateInventory(const FPackagedInventory& InventoryContents);

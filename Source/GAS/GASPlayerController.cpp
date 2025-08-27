@@ -10,6 +10,8 @@
 #include "Widgets/Input/SVirtualJoystick.h"
 #include "InventoryComponent.h"
 #include "Net/UnrealNetwork.h"
+#include "GASEnhancedInputComponent.h"
+#include "GASPlayerState.h"
 
 AGASPlayerController::AGASPlayerController()
 {
@@ -23,49 +25,78 @@ void AGASPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// only spawn touch controls on local player controllers
-	if (SVirtualJoystick::ShouldDisplayTouchInterface() && IsLocalPlayerController())
-	{
-		// spawn the mobile controls widget
-		MobileControlsWidget = CreateWidget<UUserWidget>(this, MobileControlsWidgetClass);
+	//// only spawn touch controls on local player controllers
+	//if (SVirtualJoystick::ShouldDisplayTouchInterface() && IsLocalPlayerController())
+	//{
+	//	// spawn the mobile controls widget
+	//	MobileControlsWidget = CreateWidget<UUserWidget>(this, MobileControlsWidgetClass);
 
-		if (MobileControlsWidget)
-		{
-			// add the controls to the player screen
-			MobileControlsWidget->AddToPlayerScreen(0);
+	//	if (MobileControlsWidget)
+	//	{
+	//		// add the controls to the player screen
+	//		MobileControlsWidget->AddToPlayerScreen(0);
 
-		} else {
+	//	} else {
 
-			UE_LOG(LogGAS, Error, TEXT("Could not spawn mobile controls widget."));
+	//		UE_LOG(LogGAS, Error, TEXT("Could not spawn mobile controls widget."));
 
-		}
+	//	}
+	//}
+	if (const AGASPlayerState* GASPlayerState = GetPlayerState<AGASPlayerState>()) {
+		GASAbilitySystemComponent = GASPlayerState->GetGASAbilitySystemComponent();
 	}
 }
+
+//void AGASPlayerController::SetupInputComponent()
+//{
+//	Super::SetupInputComponent();
+//
+//	// only add IMCs for local player controllers
+//	if (IsLocalPlayerController())
+//	{
+//		// Add Input Mapping Contexts
+//		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+//		{
+//			for (UInputMappingContext* CurrentContext : DefaultMappingContexts)
+//			{
+//				Subsystem->AddMappingContext(CurrentContext, 0);
+//			}
+//
+//			// only add these IMCs if we're not using mobile touch input
+//			if (!SVirtualJoystick::ShouldDisplayTouchInterface())
+//			{
+//				for (UInputMappingContext* CurrentContext : MobileExcludedMappingContexts)
+//				{
+//					Subsystem->AddMappingContext(CurrentContext, 0);
+//				}
+//			}
+//		}
+//	}
+//}
 
 void AGASPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
-
-	// only add IMCs for local player controllers
-	if (IsLocalPlayerController())
+	
+	if(UGASEnhancedInputComponent* GASInputComponent = Cast<UGASEnhancedInputComponent>(InputComponent))
 	{
-		// Add Input Mapping Contexts
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
-		{
-			for (UInputMappingContext* CurrentContext : DefaultMappingContexts)
-			{
-				Subsystem->AddMappingContext(CurrentContext, 0);
-			}
+		GASInputComponent->BindAbilityActions(RPGInputConfig, this, &AGASPlayerController::AbilityInputPressed, &AGASPlayerController::AbilityInputReleased);
+	}
+}
 
-			// only add these IMCs if we're not using mobile touch input
-			if (!SVirtualJoystick::ShouldDisplayTouchInterface())
-			{
-				for (UInputMappingContext* CurrentContext : MobileExcludedMappingContexts)
-				{
-					Subsystem->AddMappingContext(CurrentContext, 0);
-				}
-			}
-		}
+void AGASPlayerController::AbilityInputPressed(FGameplayTag InputTag)
+{
+	if(IsValid(GASAbilitySystemComponent))
+	{
+		GASAbilitySystemComponent->AbilityInputPressed(InputTag);
+	}
+}
+
+void AGASPlayerController::AbilityInputReleased(FGameplayTag InputTag)
+{
+	if(IsValid(GASAbilitySystemComponent))
+	{
+		GASAbilitySystemComponent->AbilityInputReleased(InputTag);
 	}
 }
 
@@ -91,6 +122,7 @@ void AGASPlayerController::CreateInventoryWidget()
 	{
 		InventoryWidget = Cast<UGASSystemWidget>(NewWidget);
 		InventoryWidget->SetWidgetController(GetInventoryWidgetController());
+		InventoryWidgetController->BroadcastInitialValues();
 		InventoryWidget->AddToViewport();
 	}
 }

@@ -18,4 +18,7 @@ public:
 	void AddCharacterAbilities(const TArray<TSubclassOf<class UGameplayAbility>>& AbilitiesToGrant);
 	void AddCharacterPassives(const TArray<TSubclassOf<class UGameplayAbility>>& PassivesToGrant);
 	void InitializeDefaultAttributes(const TSubclassOf<class UGameplayEffect> AttributeEffect);
+
+	void AbilityInputPressed(const FGameplayTag InputTag);
+	void AbilityInputReleased(const FGameplayTag InputTag);
 };
