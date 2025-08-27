@@ -8,6 +8,8 @@
 #include "InventoryWidgetController.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInventoryItemSignature, const FMasterItemDefinition&, Item);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FInventoryBroadcastComplete);
+
 /**
  * 
  */
@@ -20,6 +22,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FInventoryItemSignature InventoryItemDelegate;
+
+	UPROPERTY(BlueprintAssignable)
+	FInventoryBroadcastComplete InventoryBroadcastCompleteDelegate;
 
 	void SetOwningActor(AActor* InOwner);
 

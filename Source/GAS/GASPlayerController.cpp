@@ -78,8 +78,9 @@ void AGASPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 UInventoryWidgetController* AGASPlayerController::GetInventoryWidgetController()
 {
 	if (!IsValid(InventoryWidgetController)) {
-		InventoryWidgetController = NewObject<UInventoryWidgetController>(this, InventoryWidgetClass);
+		InventoryWidgetController = NewObject<UInventoryWidgetController>(this, InventoryWidgetControllerClass);
 		InventoryWidgetController->SetOwningActor(this);
+		InventoryWidgetController->BindCallbacksToDependencies();
 	}
 	return InventoryWidgetController;
 }

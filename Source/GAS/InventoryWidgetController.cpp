@@ -49,5 +49,7 @@ void UInventoryWidgetController::BroadcastInventoryContents()
 			Item.ItemQuantity = Pair.Value;
 			InventoryItemDelegate.Broadcast(Item);
 		}
+
+		InventoryBroadcastCompleteDelegate.Broadcast();
 	}
 }

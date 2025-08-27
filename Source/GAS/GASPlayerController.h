@@ -41,6 +41,7 @@ public:
 
 	UInventoryWidgetController* GetInventoryWidgetController();
 
+	UFUNCTION(BlueprintCallable)
 	void CreateInventoryWidget();
 	
 protected:
@@ -76,7 +77,7 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UInventoryWidgetController> InventoryWidgetControllerClass;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	TObjectPtr<UGASSystemWidget> InventoryWidget;
 
 	UPROPERTY(EditDefaultsOnly)
