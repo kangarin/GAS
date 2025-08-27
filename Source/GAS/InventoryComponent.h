@@ -33,6 +33,8 @@ struct TStructOpsTypeTraits<FPackagedInventory> : public TStructOpsTypeTraitsBas
 	};
 };
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FInventoryPackagedSignature, const FPackagedInventory& /*Inventory Contents*/);
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class GAS_API UInventoryComponent : public UActorComponent
 {
@@ -44,6 +46,8 @@ public:
 	// Sets default values for this component's properties
 	UInventoryComponent();
 
+	FInventoryPackagedSignature InventoryPackagedDelegate;
+
 	UFUNCTION(BlueprintCallable)
 	void AddItem(const FGameplayTag& ItemTag, int32 Count = 1);
 
@@ -52,6 +56,10 @@ public:
 
 	UFUNCTION(BlueprintPure)
 	FMasterItemDefinition GetItemDefinitionByTag(const FGameplayTag& ItemTag) const;
+
+	TMap<FGameplayTag, int32> GetInventoryMap() const { return InventoryMap; }
+
+	void ReconstructInventoryMap(const FPackagedInventory& PackagedInventory);
 
 protected:
 	// Called when the game starts
@@ -74,7 +82,6 @@ private:
 	TObjectPtr<UItemTypesToTables> InventoryDefinitions;
 
 	void PackageInventory(FPackagedInventory& PackagedInventory);
-	void ReconstructInventoryMap(const FPackagedInventory& PackagedInventory);
 		
 	UFUNCTION()
 	void OnRep_CachedInventory();

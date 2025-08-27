@@ -74,3 +74,22 @@ void AGASPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(AGASPlayerController, InventoryComponent);
 }
+
+UInventoryWidgetController* AGASPlayerController::GetInventoryWidgetController()
+{
+	if (!IsValid(InventoryWidgetController)) {
+		InventoryWidgetController = NewObject<UInventoryWidgetController>(this, InventoryWidgetClass);
+		InventoryWidgetController->SetOwningActor(this);
+	}
+	return InventoryWidgetController;
+}
+
+void AGASPlayerController::CreateInventoryWidget()
+{
+	if(UUserWidget* NewWidget = CreateWidget<UGASSystemWidget>(this, InventoryWidgetClass) )
+	{
+		InventoryWidget = Cast<UGASSystemWidget>(NewWidget);
+		InventoryWidget->SetWidgetController(GetInventoryWidgetController());
+		InventoryWidget->AddToViewport();
+	}
+}
