@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
-#include "InventoryComponent.h"
-#include "InventoryInterface.h"
-#include "InventoryWidgetController.h"
-#include "GASSystemWidget.h"
+#include "Inventory/InventoryComponent.h"
+#include "Inventory/InventoryInterface.h"
+#include "Inventory/InventoryWidgetController.h"
+#include "UI/GASSystemWidget.h"
 #include "AbilitySystemInterface.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
-#include "GASAbilitySystemComponent.h"
-#include "GASInputConfig.h"
-#include "GASEnhancedInputComponent.h"
+#include "AbilitySystem/GASAbilitySystemComponent.h"
+#include "Input/GASInputConfig.h"
+#include "Input/GASEnhancedInputComponent.h"
 #include "GASPlayerController.generated.h"
 
 

@@ -3,7 +3,7 @@
 
 #include "GASAbilitySystemLibrary.h"
 #include "Kismet/GameplayStatics.h"
-#include "GASGameMode.h"
+#include "GameModes/GASGameMode.h"
 
 UCharacterClassInfo* UGASAbilitySystemLibrary::GetCharacterDefaultInfo(const UObject* WorldContextObject)
 {

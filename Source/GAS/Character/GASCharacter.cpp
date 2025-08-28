@@ -10,12 +10,12 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
-#include "GASPlayerState.h"
+#include "Core/GASPlayerState.h"
 #include "GAS.h"
-#include "GASAbilitySystemLibrary.h"
+#include "AbilitySystem/GASAbilitySystemLibrary.h"
 #include "CharacterClassInfo.h"
-#include "GASAttributeSet.h"
-#include "GASAbilitySystemComponent.h"
+#include "AbilitySystem/GASAttributeSet.h"
+#include "AbilitySystem/GASAbilitySystemComponent.h"
 
 
 AGASCharacter::AGASCharacter()

@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "WidgetController.h"
+#include "UI/WidgetController.h"
 #include "GASSystemWidget.generated.h"
 
 /**

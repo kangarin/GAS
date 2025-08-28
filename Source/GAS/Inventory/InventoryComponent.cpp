@@ -3,7 +3,7 @@
 
 #include "InventoryComponent.h"
 #include "Net/UnrealNetwork.h"
-#include "GASAbilitySystemLibrary.h"
+#include "AbilitySystem/GASAbilitySystemLibrary.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 

@@ -2,7 +2,7 @@
 
 
 #include "GASAbilitySystemComponent.h"
-#include "GASGameplayAbility.h"
+#include "AbilitySystem/GASGameplayAbility.h"
 
 void UGASAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf<class UGameplayAbility>>& AbilitiesToGrant)
 {

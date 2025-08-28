@@ -28,6 +28,14 @@ public class GAS : ModuleRules
 
 		PublicIncludePaths.AddRange(new string[] {
 			"GAS",
+			"GAS/AbilitySystem",
+			"GAS/Character",
+			"GAS/Core",
+			"GAS/GameModes",
+			"GAS/Input",
+			"GAS/Interfaces",
+			"GAS/Inventory",
+			"GAS/UI",
 			"GAS/Variant_Platforming",
 			"GAS/Variant_Platforming/Animation",
 			"GAS/Variant_Combat",

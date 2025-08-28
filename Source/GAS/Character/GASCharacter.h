@@ -5,9 +5,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
-#include "GASAbilitySystemComponent.h"
+#include "AbilitySystem/GASAbilitySystemComponent.h"
 #include "AbilitySystemInterface.h"
-#include "GASAttributeSet.h"
+#include "AbilitySystem/GASAttributeSet.h"
 #include "AbilitySystemInterface.h"
 #include "GASCharacter.generated.h"
 

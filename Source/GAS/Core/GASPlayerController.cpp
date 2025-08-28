@@ -8,10 +8,10 @@
 #include "Blueprint/UserWidget.h"
 #include "GAS.h"
 #include "Widgets/Input/SVirtualJoystick.h"
-#include "InventoryComponent.h"
+#include "Inventory/InventoryComponent.h"
 #include "Net/UnrealNetwork.h"
-#include "GASEnhancedInputComponent.h"
-#include "GASPlayerState.h"
+#include "Input/GASEnhancedInputComponent.h"
+#include "Core/GASPlayerState.h"
 
 AGASPlayerController::AGASPlayerController()
 {
