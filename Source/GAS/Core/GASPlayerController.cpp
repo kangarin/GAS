@@ -77,6 +77,27 @@ void AGASPlayerController::BeginPlay()
 void AGASPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
+
+	// only add IMCs for local player controllers
+	if (IsLocalPlayerController())
+	{
+		// Add Input Mapping Contexts
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+		{
+			for (UInputMappingContext* CurrentContext : DefaultMappingContexts)
+			{
+				Subsystem->AddMappingContext(CurrentContext, 0);
+			}
+			// only add these IMCs if we're not using mobile touch input
+			if (!SVirtualJoystick::ShouldDisplayTouchInterface())
+			{
+				for (UInputMappingContext* CurrentContext : MobileExcludedMappingContexts)
+				{
+					Subsystem->AddMappingContext(CurrentContext, 0);
+				}
+			}
+		}
+	}
 	
 	if(UGASEnhancedInputComponent* CastGASInputComponent = Cast<UGASEnhancedInputComponent>(InputComponent))
 	{

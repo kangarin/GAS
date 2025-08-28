@@ -3,12 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
+#include "Character/CharacterBase.h"
 #include "Logging/LogMacros.h"
 #include "AbilitySystem/GASAbilitySystemComponent.h"
 #include "AbilitySystemInterface.h"
 #include "AbilitySystem/GASAttributeSet.h"
-#include "AbilitySystemInterface.h"
 #include "GASCharacter.generated.h"
 
 class USpringArmComponent;
@@ -23,7 +22,7 @@ DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
  *  Implements a controllable orbiting camera
  */
 UCLASS(abstract)
-class AGASCharacter : public ACharacter, public IAbilitySystemInterface
+class AGASCharacter : public ACharacterBase, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -72,23 +71,17 @@ protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	/** Initialize Ability Actor Info */
-	void InitAbilityActorInfo();
+	virtual void InitAbilityActorInfo() override;
 
 	/** Initialize default abilities, attributes, and effects */
-	void InitClassDefaults();
+	virtual void InitClassDefaults() override;
 
 	/** Binds ability system callbacks to functions on this class */
-	void BindCallbacksToDependencies();
+	virtual void BindCallbacksToDependencies() override;
 
 	/** Broadcast initial values for attributes that aren't replicated by default */
 	UFUNCTION(BlueprintCallable)
 	void BroadcastInitialValues();
-
-public:
-	UFUNCTION(BlueprintImplementableEvent)
-	void OnHealthChanged(float CurrentHealth, float MaxHealth);
-	UFUNCTION(BlueprintImplementableEvent)
-	void OnManaChanged(float CurrentMana, float MaxMana);
 
 protected:
 
@@ -130,10 +123,6 @@ public:
 	TObjectPtr<UGASAbilitySystemComponent> GASAbilitySystemComponent;
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivate = true))
 	TObjectPtr<UGASAttributeSet> GASAttributeSet;
-
-private:
-	UPROPERTY(EditAnywhere)
-	FGameplayTag CharacterTag;
 
 };
 

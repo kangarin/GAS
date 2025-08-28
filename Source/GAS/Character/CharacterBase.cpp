@@ -32,3 +32,14 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 }
 
+void ACharacterBase::InitAbilityActorInfo()
+{
+}
+
+void ACharacterBase::BindCallbacksToDependencies()
+{
+}
+
+void ACharacterBase::InitClassDefaults()
+{
+}

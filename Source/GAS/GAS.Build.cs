@@ -33,7 +33,6 @@ public class GAS : ModuleRules
 			"GAS/Core",
 			"GAS/GameModes",
 			"GAS/Input",
-			"GAS/Interfaces",
 			"GAS/Inventory",
 			"GAS/UI",
 			"GAS/Variant_Platforming",
