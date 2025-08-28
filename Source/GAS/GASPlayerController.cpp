@@ -78,9 +78,9 @@ void AGASPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 	
-	if(UGASEnhancedInputComponent* GASInputComponent = Cast<UGASEnhancedInputComponent>(InputComponent))
+	if(UGASEnhancedInputComponent* CastGASInputComponent = Cast<UGASEnhancedInputComponent>(InputComponent))
 	{
-		GASInputComponent->BindAbilityActions(RPGInputConfig, this, &AGASPlayerController::AbilityInputPressed, &AGASPlayerController::AbilityInputReleased);
+		CastGASInputComponent->BindAbilityActions(RPGInputConfig, this, &AGASPlayerController::AbilityInputPressed, &AGASPlayerController::AbilityInputReleased);
 	}
 }
 
