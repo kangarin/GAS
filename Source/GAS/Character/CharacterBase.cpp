@@ -43,3 +43,7 @@ void ACharacterBase::BindCallbacksToDependencies()
 void ACharacterBase::InitClassDefaults()
 {
 }
+
+void ACharacterBase::BroadcastInitialValues()
+{
+}

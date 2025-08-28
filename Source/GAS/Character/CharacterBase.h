@@ -32,6 +32,10 @@ protected:
 	/** Initialize default abilities, attributes, and effects */
 	virtual void InitClassDefaults();
 
+	/** Broadcast initial values for attributes that aren't replicated by default */
+	UFUNCTION(BlueprintCallable)
+	virtual void BroadcastInitialValues();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -42,9 +46,8 @@ public:
 public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnHealthChanged(float CurrentHealth, float MaxHealth);
+
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnManaChanged(float CurrentMana, float MaxMana);
-
-
 
 };

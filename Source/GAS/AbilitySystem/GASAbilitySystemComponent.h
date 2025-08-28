@@ -6,6 +6,7 @@
 #include "AbilitySystemComponent.h"
 #include "GASAbilitySystemComponent.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnAttributesGiven);
 /**
  * 
  */
@@ -15,6 +16,9 @@ class GAS_API UGASAbilitySystemComponent : public UAbilitySystemComponent
 	GENERATED_BODY()
 
 public:
+
+	FOnAttributesGiven OnAttributesGiven;
+
 	void AddCharacterAbilities(const TArray<TSubclassOf<class UGameplayAbility>>& AbilitiesToGrant);
 	void AddCharacterPassives(const TArray<TSubclassOf<class UGameplayAbility>>& PassivesToGrant);
 	void InitializeDefaultAttributes(const TSubclassOf<class UGameplayEffect> AttributeEffect);

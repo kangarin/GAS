@@ -33,6 +33,7 @@ void UGASAbilitySystemComponent::InitializeDefaultAttributes(const TSubclassOf<c
 	const FGameplayEffectContextHandle ContextHandle = MakeEffectContext();
 	const FGameplayEffectSpecHandle SpecHandle = MakeOutgoingSpec(AttributeEffect, 1, ContextHandle);
 	ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+	OnAttributesGiven.Broadcast();
 }
 
 void UGASAbilitySystemComponent::AbilityInputPressed(const FGameplayTag InputTag)

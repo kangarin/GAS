@@ -4,6 +4,7 @@
 #include "Character/EnemyBase.h"
 #include "AbilitySystem/GASAbilitySystemLibrary.h"
 #include "Character/CharacterClassInfo.h"
+#include <Net/UnrealNetwork.h>
 
 
 AEnemyBase::AEnemyBase()
@@ -21,14 +22,19 @@ UAbilitySystemComponent* AEnemyBase::GetAbilitySystemComponent() const
 	return GASAbilitySystemComponent;
 }
 
+void AEnemyBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(AEnemyBase, bInitAttributes);
+}
+
 void AEnemyBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if(HasAuthority())
-	{
-		InitAbilityActorInfo();
-	}
+	BindCallbacksToDependencies();
+	InitAbilityActorInfo();
+
 }
 
 void AEnemyBase::InitAbilityActorInfo()
@@ -39,6 +45,7 @@ void AEnemyBase::InitAbilityActorInfo()
 
 		if(HasAuthority()){
 			InitClassDefaults();
+			BroadcastInitialValues();
 		}
 	}
 }
@@ -83,6 +90,29 @@ void AEnemyBase::BindCallbacksToDependencies()
 				OnManaChanged(CurrentMana, MaxMana);
 			}
 		);
-	}
 
+		if (HasAuthority()) {
+			GASAbilitySystemComponent->OnAttributesGiven.AddLambda([&]() {
+				bInitAttributes = true;
+				});
+		}
+	}
+}
+
+void AEnemyBase::BroadcastInitialValues()
+{
+	if(IsValid(GASAttributeSet))
+	{
+		OnHealthChanged(GASAttributeSet->GetHealth(), GASAttributeSet->GetMaxHealth());
+		OnManaChanged(GASAttributeSet->GetMana(), GASAttributeSet->GetMaxMana());
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("'%s' Failed to broadcast initial values! Attribute Set is invalid."), *GetNameSafe(this));
+	}
+}
+
+void AEnemyBase::OnRep_InitAttributes()
+{
+	BroadcastInitialValues();
 }

@@ -80,8 +80,7 @@ protected:
 	virtual void BindCallbacksToDependencies() override;
 
 	/** Broadcast initial values for attributes that aren't replicated by default */
-	UFUNCTION(BlueprintCallable)
-	void BroadcastInitialValues();
+	virtual void BroadcastInitialValues() override;
 
 protected:
 
