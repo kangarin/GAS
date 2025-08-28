@@ -13,3 +13,12 @@ UCharacterClassInfo* UGASAbilitySystemLibrary::GetCharacterDefaultInfo(const UOb
 	}
 	return nullptr;
 }
+
+UProjectileInfo* UGASAbilitySystemLibrary::GetProjectileInfo(const UObject* WorldContextObject)
+{
+	if(AGASGameMode* GASGameMode = Cast<AGASGameMode>(UGameplayStatics::GetGameMode(WorldContextObject)))
+	{
+		return GASGameMode->GetProjectileInfo();
+	}
+	return nullptr;
+}

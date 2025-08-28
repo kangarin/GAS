@@ -9,6 +9,8 @@
 #include "GASAbilitySystemLibrary.generated.h"
 
 class UCharacterClassInfo;
+class UProjectileInfo;
+
 /**
  * 
  */
@@ -20,6 +22,9 @@ class GAS_API UGASAbilitySystemLibrary : public UBlueprintFunctionLibrary
 public:
 	UFUNCTION(BlueprintPure)
 	static UCharacterClassInfo* GetCharacterDefaultInfo(const UObject* WorldContextObject);
+
+	UFUNCTION(BlueprintPure)
+	static UProjectileInfo* GetProjectileInfo(const UObject* WorldContextObject);
 	
 	template<typename T>
 	static T* GetDataTableRowByTag(UDataTable* DataTable, FGameplayTag Tag) {

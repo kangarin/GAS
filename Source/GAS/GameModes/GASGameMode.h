@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameMode.h"
 #include "CharacterClassInfo.h"
+#include "Projectiles/ProjectileInfo.h"
 #include "GASGameMode.generated.h"
 
 /**
@@ -21,9 +22,16 @@ public:
 	AGASGameMode();
 
 	UCharacterClassInfo* GetCharacterClassDefaultInfo() const { return CharacterClassDefaultInfo; }
+	UProjectileInfo* GetProjectileInfo() const { return ProjectileInfo; }
+
+
+private:
 
 	UPROPERTY(EditDefaultsOnly)
-	TObjectPtr<UCharacterClassInfo>CharacterClassDefaultInfo;
+	TObjectPtr<UCharacterClassInfo> CharacterClassDefaultInfo;
+
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UProjectileInfo> ProjectileInfo;
 };
 
 
