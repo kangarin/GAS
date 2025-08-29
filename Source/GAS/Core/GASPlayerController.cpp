@@ -42,9 +42,6 @@ void AGASPlayerController::BeginPlay()
 
 	//	}
 	//}
-	if (const AGASPlayerState* GASPlayerState = GetPlayerState<AGASPlayerState>()) {
-		GASAbilitySystemComponent = GASPlayerState->GetGASAbilitySystemComponent();
-	}
 }
 
 //void AGASPlayerController::SetupInputComponent()
@@ -101,13 +98,13 @@ void AGASPlayerController::SetupInputComponent()
 	
 	if(UGASEnhancedInputComponent* CastGASInputComponent = Cast<UGASEnhancedInputComponent>(InputComponent))
 	{
-		CastGASInputComponent->BindAbilityActions(RPGInputConfig, this, &AGASPlayerController::AbilityInputPressed, &AGASPlayerController::AbilityInputReleased);
+		CastGASInputComponent->BindAbilityActions(GASInputConfig, this, &AGASPlayerController::AbilityInputPressed, &AGASPlayerController::AbilityInputReleased);
 	}
 }
 
 void AGASPlayerController::AbilityInputPressed(FGameplayTag InputTag)
 {
-	if(IsValid(GASAbilitySystemComponent))
+	if(IsValid(GetGASAbilitySystemComponent()))
 	{
 		GASAbilitySystemComponent->AbilityInputPressed(InputTag);
 	}
@@ -115,7 +112,7 @@ void AGASPlayerController::AbilityInputPressed(FGameplayTag InputTag)
 
 void AGASPlayerController::AbilityInputReleased(FGameplayTag InputTag)
 {
-	if(IsValid(GASAbilitySystemComponent))
+	if(IsValid(GetGASAbilitySystemComponent()))
 	{
 		GASAbilitySystemComponent->AbilityInputReleased(InputTag);
 	}
@@ -146,4 +143,14 @@ void AGASPlayerController::CreateInventoryWidget()
 		InventoryWidgetController->BroadcastInitialValues();
 		InventoryWidget->AddToViewport();
 	}
+}
+
+UGASAbilitySystemComponent* AGASPlayerController::GetGASAbilitySystemComponent() const
+{
+	if (!IsValid(GASAbilitySystemComponent.Get())) {
+		if (const AGASPlayerState* GASPlayerState = GetPlayerState<AGASPlayerState>()) {
+			const_cast<TObjectPtr<UGASAbilitySystemComponent>&>(GASAbilitySystemComponent) = GASPlayerState->GetGASAbilitySystemComponent();
+		}
+	}
+	return GASAbilitySystemComponent.Get();
 }

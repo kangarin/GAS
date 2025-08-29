@@ -17,6 +17,7 @@ struct FGASInputAction
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UInputAction> InputAction = nullptr;
 
+	UPROPERTY(EditDefaultsOnly)
 	FGameplayTag InputTag = FGameplayTag();
 };
 /**

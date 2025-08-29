@@ -84,7 +84,7 @@ private:
 	TObjectPtr<UGASEnhancedInputComponent> GASInputComponent;
 
 	UPROPERTY(EditDefaultsOnly)
-	TObjectPtr<UGASInputConfig> RPGInputConfig;
+	TObjectPtr<UGASInputConfig> GASInputConfig;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Replicated)
 	TObjectPtr<UInventoryComponent> InventoryComponent;
@@ -100,5 +100,7 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UGASSystemWidget> InventoryWidgetClass;
+
+	UGASAbilitySystemComponent* GetGASAbilitySystemComponent() const;
 
 };
