@@ -30,6 +30,7 @@ private:
 	TObjectPtr<AActor> AvatarActorFromInfo;
 	FProjectileParams CurrentProjectileParams;
 
+	UFUNCTION(BlueprintCallable)
 	void SpawnProjectile();
 	
 };
