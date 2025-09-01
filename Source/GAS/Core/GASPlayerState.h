@@ -27,7 +27,7 @@ public:
 	UGASAttributeSet* GetGASAttributeSet() const { return GASAttributeSet; }
 
 private:
-	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UGASAbilitySystemComponent> GASAbilitySystemComponent;
 
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = true))

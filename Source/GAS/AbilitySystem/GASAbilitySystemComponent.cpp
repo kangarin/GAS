@@ -3,6 +3,7 @@
 
 #include "GASAbilitySystemComponent.h"
 #include "AbilitySystem/GASGameplayAbility.h"
+#include <ProjectileAbility.h>
 
 void UGASAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf<class UGameplayAbility>>& AbilitiesToGrant)
 {
@@ -70,4 +71,35 @@ void UGASAbilitySystemComponent::AbilityInputReleased(const FGameplayTag InputTa
 			InvokeReplicatedEvent(EAbilityGenericReplicatedEvent::InputReleased, Spec.Handle, Spec.ActivationInfo.GetActivationPredictionKey());
 		}
 	}
+}
+
+void UGASAbilitySystemComponent::SetDynamicProjectile(const FGameplayTag& ProjectileTag)
+{
+	if(!ProjectileTag.IsValid()) {
+		return;
+	}
+
+	if (!GetAvatarActor()->HasAuthority()) {
+		ServerSetDynamicProjectile(ProjectileTag);
+		return;
+	}
+
+	if (ActiveProjectileAbility.IsValid()) {
+		ClearAbility(ActiveProjectileAbility);
+	}
+
+	if (IsValid(DynamicProjectileAbility)) {
+		FGameplayAbilitySpec Spec = FGameplayAbilitySpec(DynamicProjectileAbility, 1);
+		if (UProjectileAbility* ProjectileAbility = Cast<UProjectileAbility>(Spec.Ability)) {
+			ProjectileAbility->ProjectileToSpawnTag = ProjectileTag;
+			Spec.DynamicAbilityTags.AddTag(ProjectileAbility->InputTag);
+
+			ActiveProjectileAbility = GiveAbility(Spec);
+		}
+	}
+}
+
+void UGASAbilitySystemComponent::ServerSetDynamicProjectile_Implementation(const FGameplayTag& ProjectileTag)
+{
+	SetDynamicProjectile(ProjectileTag);
 }

@@ -124,6 +124,13 @@ void AGASPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 	DOREPLIFETIME(AGASPlayerController, InventoryComponent);
 }
 
+void AGASPlayerController::SetDynamicProjectile_Implementation(const FGameplayTag& ProjectileTag)
+{
+	if (IsValid(GASAbilitySystemComponent)) {
+		GASAbilitySystemComponent->SetDynamicProjectile(ProjectileTag);
+	}
+}
+
 UInventoryWidgetController* AGASPlayerController::GetInventoryWidgetController()
 {
 	if (!IsValid(InventoryWidgetController)) {

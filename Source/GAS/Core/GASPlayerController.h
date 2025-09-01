@@ -14,6 +14,7 @@
 #include "AbilitySystem/GASAbilitySystemComponent.h"
 #include "Input/GASInputConfig.h"
 #include "Input/GASEnhancedInputComponent.h"
+#include "AbilitySystem/GASAbilitySystemInterface.h"
 #include "GASPlayerController.generated.h"
 
 
@@ -25,7 +26,7 @@ class UUserWidget;
  *  Manages input mappings
  */
 UCLASS(abstract)
-class AGASPlayerController : public APlayerController, public IAbilitySystemInterface, public IInventoryInterface
+class AGASPlayerController : public APlayerController, public IAbilitySystemInterface, public IInventoryInterface, public IGASAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -43,6 +44,8 @@ public:
 	}
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	virtual void SetDynamicProjectile_Implementation(const FGameplayTag& ProjectileTag) override;
 
 	UInventoryWidgetController* GetInventoryWidgetController();
 

@@ -25,4 +25,15 @@ public:
 
 	void AbilityInputPressed(const FGameplayTag InputTag);
 	void AbilityInputReleased(const FGameplayTag InputTag);
+
+	void SetDynamicProjectile(const FGameplayTag& ProjectileTag);
+
+private:
+	FGameplayAbilitySpecHandle ActiveProjectileAbility;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UGameplayAbility> DynamicProjectileAbility;
+
+	UFUNCTION(Server, Reliable)
+	void ServerSetDynamicProjectile(const FGameplayTag& ProjectileTag);
 };
