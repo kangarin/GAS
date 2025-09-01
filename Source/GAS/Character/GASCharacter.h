@@ -8,6 +8,7 @@
 #include "AbilitySystem/GASAbilitySystemComponent.h"
 #include "AbilitySystemInterface.h"
 #include "AbilitySystem/GASAttributeSet.h"
+#include "AbilitySystem/GASAbilitySystemInterface.h"
 #include "GASCharacter.generated.h"
 
 class USpringArmComponent;
@@ -22,7 +23,7 @@ DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
  *  Implements a controllable orbiting camera
  */
 UCLASS(abstract)
-class AGASCharacter : public ACharacterBase, public IAbilitySystemInterface
+class AGASCharacter : public ACharacterBase, public IAbilitySystemInterface, public IGASAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -64,6 +65,8 @@ public:
 
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void OnRep_PlayerState() override;
+
+	virtual USceneComponent* GetDynamicSpawnPoint_Implementation() override { return DynamicProjectileSpawnPoint; }
 
 protected:
 
@@ -122,6 +125,10 @@ public:
 	TObjectPtr<UGASAbilitySystemComponent> GASAbilitySystemComponent;
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivate = true))
 	TObjectPtr<UGASAttributeSet> GASAttributeSet;
+
+private:
+	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USceneComponent> DynamicProjectileSpawnPoint;
 
 };
 

@@ -4,7 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Components/StaticMeshComponent.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 #include "ProjectileBase.generated.h"
+
+struct FProjectileParams;
 
 UCLASS()
 class GAS_API AProjectileBase : public AActor
@@ -15,12 +19,13 @@ public:
 	// Sets default values for this actor's properties
 	AProjectileBase();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	void SetProjectileParams(const FProjectileParams& Params);
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+private:
+	
+	UPROPERTY()
+	TObjectPtr<UStaticMeshComponent> ProjectileMesh;
 
+	UPROPERTY()
+	TObjectPtr<UProjectileMovementComponent> ProjectileMovementComponent;
 };
